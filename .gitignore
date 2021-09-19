@@ -6,7 +6,11 @@ styles.css
 styles.css.gz
 classes
 out
+frontend
 node_modules
+package.json
+package-lock.json
+webpack.config.js
 webpack.generated.js
 /node
 target
