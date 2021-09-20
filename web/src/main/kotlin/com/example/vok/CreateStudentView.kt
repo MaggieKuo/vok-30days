@@ -22,15 +22,17 @@ class CreateStudentView: KComposite() {
             }
             numberField("身高"){
                 bind(binder).bind(Student::height)
+                placeholder = "公分"
             }
             numberField("體重"){
                 bind(binder).bind(Student::weight)
+                placeholder = "公斤"
             }
 
             button("Save"){
                 onLeftClick {
                     val student = Student()
-                    if (binder.writeBeanIfValid(student)){
+                    if (binder.validate().isOk && binder.writeBeanIfValid(student)){
                         student.save()
                         StudentView.navigateTo(student.id!!)
                     }
