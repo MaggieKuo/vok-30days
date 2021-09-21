@@ -2,17 +2,22 @@ package com.example.vok
 
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.Text
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.router.BeforeEvent
 import com.vaadin.flow.router.HasUrlParameter
 import com.vaadin.flow.router.Route
+import com.vaadin.flow.router.RouterLink
+import javax.validation.constraints.Null
 
 @Route("student", layout = MainLayout::class)
 class StudentView: KComposite(), HasUrlParameter<Long> {
+    private lateinit var editLink: RouterLink
     private lateinit var name: Text
     private lateinit var gender: Text
     private lateinit var birthday: Text
     private val root = ui {
         verticalLayout {
+            routerLink(VaadinIcon.ARROW_LEFT, null, viewType = AllStudentsView::class)
             div {
                 strong("姓名 : "); this@StudentView.name = text("")
             }
@@ -22,6 +27,7 @@ class StudentView: KComposite(), HasUrlParameter<Long> {
             div {
                 strong("生日 : "); this@StudentView.birthday = text("")
             }
+            editLink = routerLink(VaadinIcon.EDIT,null)
         }
     }
 
@@ -30,6 +36,7 @@ class StudentView: KComposite(), HasUrlParameter<Long> {
         name.text = student.name
         gender.text = student.gender.toString()
         birthday.text = student.birthday.toString()
+        editLink.setRoute(EditStudent::class, student.id!!)
     }
 
     companion object {

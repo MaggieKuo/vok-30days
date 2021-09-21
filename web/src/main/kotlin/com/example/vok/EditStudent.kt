@@ -1,43 +1,52 @@
 package com.example.vok
 
 import com.github.mvysny.karibudsl.v10.*
+import com.vaadin.flow.router.BeforeEvent
+import com.vaadin.flow.router.HasUrlParameter
 import com.vaadin.flow.router.Route
 
-@Route("create-student", layout = MainLayout::class)
-class CreateStudentView: KComposite() {
+@Route("edit-student", layout = MainLayout::class)
+class EditStudent : KComposite(), HasUrlParameter<Long> {
     private val binder = beanValidationBinder<Student>()
+    private var student: Student? = null
     private val root = ui {
         verticalLayout {
-            h1("新增學生資料")
-            textField("姓名"){
-                focus()
+            h1("學生資料修改")
+            textField("姓名 : "){
                 bind(binder).bind(Student::name)
             }
-            datePicker("生日"){
-                bind(binder).bind(Student::birthday)
-            }
-            comboBox<Gender>("性別"){
+            comboBox<Gender>("性別 : "){
                 setItems(*Gender.values())
                 bind(binder).bind(Student::gender)
             }
+            datePicker("生日 : "){
+                bind(binder).bind(Student::birthday)
+            }
             numberField("身高"){
                 bind(binder).bind(Student::height)
-                placeholder = "公分"
             }
             numberField("體重"){
                 bind(binder).bind(Student::weight)
-                placeholder = "公斤"
             }
-
             button("儲存"){
                 onLeftClick {
-                    val student = Student()
+                    val student = student!!
                     if (binder.validate().isOk && binder.writeBeanIfValid(student)){
                         student.save()
                         StudentView.navigateTo(student.id!!)
                     }
                 }
             }
+            routerLink(null, "返回", AllStudentsView::class)
         }
     }
+
+    override fun setParameter(event: BeforeEvent?, studentId: Long?) {
+        binder.readBean(Student.getById(studentId!!))
+    }
+
+    companion object{
+        fun navigateTo(studentId: Long) = navigateToView(EditStudent::class, studentId)
+    }
 }
+

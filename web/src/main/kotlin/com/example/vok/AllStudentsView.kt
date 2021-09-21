@@ -5,7 +5,10 @@ import com.github.mvysny.karibudsl.v10.*
 import com.github.vokorm.dataloader.dataLoader
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.data.converter.LocalDateToDateConverter
+import com.vaadin.flow.data.renderer.NativeButtonRenderer
+import com.vaadin.flow.data.renderer.Renderer
 import com.vaadin.flow.router.AfterNavigationEvent
 import com.vaadin.flow.router.AfterNavigationObserver
 import com.vaadin.flow.router.Route
@@ -46,6 +49,14 @@ class AllStudentsView: KComposite(), AfterNavigationObserver {
                 addColumnFor(Student::birthday).setHeader("生日")
                 addColumnFor(Student::height).setHeader("身高")
                 addColumnFor(Student::weight).setHeader("體重")
+                addColumn(NativeButtonRenderer("Show", {StudentView.navigateTo(it.id!!)}))
+                addColumn(NativeButtonRenderer("Edit", {EditStudent.navigateTo(it.id!!)}))
+                addColumn(NativeButtonRenderer("Delete") {
+                    confirmDialog(text = "是否確定刪除${it.name}的資料？") {
+                        it.delete()
+                        this.refresh()
+                    }
+                })
             }
         }
     }
