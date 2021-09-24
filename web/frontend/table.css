@@ -1,0 +1,18 @@
+/* table */
+.table {
+  display: table;
+  border-collapse: collapse;
+  width: 500px;
+  margin:0px;
+}
+
+/* tr */
+.tr{
+    display: table-row; border:0px; margin:0px;
+}
+
+/* td , th */
+.td {
+  display: table-cell;
+  width: 180px;
+}
