@@ -1,7 +1,11 @@
 package com.example.vok
 
+import com.github.mvysny.vokdataloader.DataLoader
+import com.github.mvysny.vokdataloader.withFilter
 import com.github.vokorm.KEntity
+import com.github.vokorm.dataloader.dataLoader
 import com.gitlab.mvysny.jdbiorm.Dao
+import eu.vaadinonkotlin.vaadin10.VokDataProvider
 import java.time.LocalDate
 import java.util.*
 import javax.validation.constraints.*
@@ -34,6 +38,11 @@ data class Student(
     var student_id : String? = null
 ): KEntity<Long>{
     companion object :Dao<Student, Long>(Student::class.java)
+    val grades : DataLoader<Grade>
+        get() = Grade.dataLoader.withFilter {
+            Grade::student_id eq id
+        }
+
 }
 
 enum class Gender {
