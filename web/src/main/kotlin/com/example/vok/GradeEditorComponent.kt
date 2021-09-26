@@ -3,6 +3,7 @@ package com.example.vok
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.Button
+import eu.vaadinonkotlin.security.AllowRoles
 
 class GradeEditorComponent : KComposite() {
     var gradeCreatedListener: () -> Unit = {}
