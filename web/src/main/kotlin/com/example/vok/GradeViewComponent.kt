@@ -2,6 +2,7 @@ package com.example.vok
 
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.dependency.StyleSheet
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -35,16 +36,19 @@ class GradeViewComponent : KComposite() {
                 }
             }
         }
-        Student.getById(studentId).grades.fetch().forEach {
+        Student.getById(studentId).grades.fetch().forEach {grade ->
             grades.apply {
                 div("table") {
                     div("tr") {
-                        div("td") { label("${it.description}") }
-                        div("td") { label("${it.mandarin}") }
-                        div("td") { label("${it.english}") }
-                        div("td") { label("${it.math}") }
-                        div("td") { label("${it.pe}") }
-
+                        div("td") { label("${grade.description}") }
+                        div("td") { label("${grade.mandarin}") }
+                        div("td") { label("${grade.english}") }
+                        div("td") { label("${grade.math}") }
+                        div("td") { label("${grade.pe}") }
+                        button("刪除"){
+                            addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_SMALL )
+                            onLeftClick { grade.delete(); refresh() }
+                        }
 //                    html("<p>" +
 //                            "<strong>學期:</strong>${it.description}&nbsp;" +
 //                            "<strong>國文:</strong>${it.mandarin}&nbsp;" +
@@ -53,7 +57,9 @@ class GradeViewComponent : KComposite() {
 //                            "<strong>體育:</strong>${it.pe}" +
 //                            "</p>")
                     }
+
                 }
+
             }
         }
     }

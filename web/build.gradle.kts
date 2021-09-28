@@ -39,7 +39,6 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     implementation("com.github.javafaker:javafaker:1.0.2")
-
 }
 
 vaadin {

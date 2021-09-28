@@ -1,7 +1,6 @@
 package com.example.vok
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.google.gson.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import eu.vaadinonkotlin.VaadinOnKotlin
@@ -12,6 +11,9 @@ import io.javalin.http.JavalinServlet
 import org.flywaydb.core.Flyway
 import org.h2.Driver
 import org.slf4j.LoggerFactory
+import java.lang.reflect.Type
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.servlet.ServletContextEvent
 import javax.servlet.ServletContextListener
 import javax.servlet.annotation.WebListener
@@ -82,7 +84,17 @@ class JavalinRestServlet : HttpServlet() {
 }
 
 fun Javalin.configureRest(): Javalin {
-    val gson: Gson = GsonBuilder().create()
+    val gson: Gson = GsonBuilder()
+        .setPrettyPrinting()
+        .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
+        .excludeFieldsWithoutExposeAnnotation()
+        .create()
     gson.configureToJavalin()
+    studentRest()
     return this
+}
+
+class LocalDateAdapter: JsonSerializer<LocalDate>{
+    override fun serialize(date: LocalDate, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement =
+        JsonPrimitive(date.format(DateTimeFormatter.ISO_LOCAL_DATE))
 }
