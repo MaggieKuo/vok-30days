@@ -5,6 +5,9 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import eu.vaadinonkotlin.VaadinOnKotlin
 import eu.vaadinonkotlin.rest.configureToJavalin
+import eu.vaadinonkotlin.security.LoggedInUserResolver
+import eu.vaadinonkotlin.security.loggedInUserResolver
+import eu.vaadinonkotlin.vaadin10.Session
 import eu.vaadinonkotlin.vokdb.dataSource
 import io.javalin.Javalin
 import io.javalin.http.JavalinServlet
@@ -54,6 +57,17 @@ class Bootstrap: ServletContextListener {
             .load()
         flyway.migrate()
         log.info("Initialization complete")
+
+        //setup security
+        VaadinOnKotlin.loggedInUserResolver = object : LoggedInUserResolver{
+            override fun isLoggedIn(): Boolean = Session.loginService.isLoggedIn
+            override fun getCurrentUserRoles(): Set<String> = Session.loginService.getCurrentUserRoles()
+        }
+
+        // Create testing users
+        User(username = "admin", roles = "admin").apply { setPassword("admin") }.save(false)
+        User(username = "teacher", roles = "teacher").apply { setPassword("teacher") }.save(false)
+        User(username = "student", roles = "student").apply { setPassword("student") }.save(false)
     }
 
     override fun contextDestroyed(sce: ServletContextEvent?) {
