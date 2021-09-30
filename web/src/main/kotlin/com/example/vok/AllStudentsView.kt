@@ -13,12 +13,18 @@ import com.vaadin.flow.data.renderer.ComponentRenderer
 import com.vaadin.flow.router.AfterNavigationEvent
 import com.vaadin.flow.router.AfterNavigationObserver
 import com.vaadin.flow.router.Route
+import eu.vaadinonkotlin.security.AllowAllUsers
+import eu.vaadinonkotlin.security.AllowRoles
+import eu.vaadinonkotlin.security.LoggedInUserResolver
+import eu.vaadinonkotlin.vaadin10.Session
+import eu.vaadinonkotlin.vaadin10.VokSecurity
 import eu.vaadinonkotlin.vaadin10.vokdb.setDataLoader
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
 @Route("students", layout = MainLayout::class)
+@AllowAllUsers
 class AllStudentsView: KComposite(), AfterNavigationObserver {
     private lateinit var grid: Grid<Student>
     private val root = ui {
@@ -60,10 +66,12 @@ class AllStudentsView: KComposite(), AfterNavigationObserver {
 //                })
                 addButtonColumn(VaadinIcon.EYE, "view") { StudentView.navigateTo(it.id!!) }
                 addButtonColumn(VaadinIcon.EDIT, "edit") { EditStudent.navigateTo(it.id!!) }
-                addButtonColumn(VaadinIcon.TRASH, "delete"){
-                    confirmDialog(text = "是否確定刪除${it.name}的資料？") {
-                        it.delete()
-                        this.refresh()
+                if (Session.loginService.isUserInRole("administrator")) {
+                    addButtonColumn(VaadinIcon.TRASH, "delete") {
+                        confirmDialog(text = "是否確定刪除${it.name}的資料？") {
+                            it.delete()
+                            this.refresh()
+                        }
                     }
                 }
             }

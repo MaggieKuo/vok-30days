@@ -6,9 +6,12 @@ import com.vaadin.flow.component.login.LoginI18n
 import com.vaadin.flow.router.BeforeEnterEvent
 import com.vaadin.flow.router.BeforeEnterObserver
 import com.vaadin.flow.router.Route
+import eu.vaadinonkotlin.security.AllowAll
+import eu.vaadinonkotlin.security.AllowAllUsers
 import eu.vaadinonkotlin.vaadin10.Session
 
 @Route("login")
+@AllowAll
 class LoginView: KComposite(), BeforeEnterObserver {
     private lateinit var loginForm: LoginForm
 

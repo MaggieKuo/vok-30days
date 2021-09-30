@@ -35,7 +35,6 @@ class LoginServices : Serializable {
     }
 
     fun isUserInRole(role: String): Boolean = getCurrentUserRoles().contains(role)
-
     fun isAdmin(): Boolean = isUserInRole("administrator")
 }
 

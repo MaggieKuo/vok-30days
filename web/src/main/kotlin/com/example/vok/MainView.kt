@@ -2,8 +2,10 @@ package com.example.vok
 
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.router.Route
+import eu.vaadinonkotlin.security.AllowAll
 
 @Route("")
+@AllowAll
 class MainView: KComposite() {
     private val root = ui{
         verticalLayout {

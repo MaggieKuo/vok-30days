@@ -37,7 +37,6 @@ class StudentView: KComposite(), HasUrlParameter<Long> {
     }
 
     override fun setParameter(event: BeforeEvent?, studentId: Long) {
-
         val student = Student.getById(studentId)
         gradeView.studentId = studentId
         gradeEditor.student = student
